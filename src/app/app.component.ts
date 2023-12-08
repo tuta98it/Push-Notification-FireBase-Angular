@@ -26,12 +26,10 @@ export class AppComponent implements OnInit {
 
   app: any;
   messaging: any;
-  currentMessage = new BehaviorSubject(null);
   constructor(private pushNotificationService: PushNotificationService) {
     this.pushNotificationService.requestPermission();
     // Initialize Firebase
     this.app = initializeApp(firebaseConfig);
-    // analytics = getAnalytics(app);
     this.messaging = getMessaging(this.app);
   }
 
