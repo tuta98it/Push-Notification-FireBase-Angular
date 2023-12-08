@@ -17,13 +17,6 @@ const firebaseConfig = {
   measurementId: "G-T480HZX4TY"
 };
 
-
-
-// onBackgroundMessage(messaging, (payload) => {
-//   console.log("Message received:", payload);
-//   // You can handle the received message here
-// });
-// End
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -35,6 +28,7 @@ export class AppComponent implements OnInit {
   messaging: any;
   currentMessage = new BehaviorSubject(null);
   constructor(private pushNotificationService: PushNotificationService) {
+    this.pushNotificationService.requestPermission();
     // Initialize Firebase
     this.app = initializeApp(firebaseConfig);
     // analytics = getAnalytics(app);
@@ -67,14 +61,50 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // Start push-notification
     this.requestPermission();
     // Handle incoming messages (push notifications)
     onMessage(this.messaging, (payloadNotity) => {
       console.log('Message received. ', payloadNotity);
       const notification = payloadNotity.notification;
-      this.pushNotificationService.create(notification?.title ?? '', { body: notification?.body}).subscribe();
+      this.pushNotificationService.create(notification?.title ?? '', { body: notification?.body }).subscribe({
+        next: (resNotity: any) => {
+          var event = resNotity.event;
+          var notification = resNotity.notification;
+          switch (event.type) {
+            case 'show':
+              console.log('actioned: ', 'show');
+              break;
+
+            case 'click':
+              console.log('actioned: ', 'click');
+              break;
+
+            case 'error':
+              console.log('actioned: ', 'error');
+              break;
+
+            case 'close':
+              console.log('res: ', 'close');
+              break;
+
+            default:
+              break;
+          }
+        },
+        error: (err: any) => {
+
+        },
+        component: () => { }
+      });
       // ...
     });
+
+    // onBackgroundMessage(messaging, (payload) => {
+    //   console.log("Message received:", payload);
+    //   // You can handle the received message here
+    // });
+    // End
   }
 
   title = 'push-notification';
