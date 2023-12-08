@@ -7,6 +7,8 @@ import { getMessaging, getToken, onMessage } from "firebase/messaging";
 import { onBackgroundMessage } from "firebase/messaging/sw";
 import { BehaviorSubject } from 'rxjs';
 import { PushNotificationService } from './services/push-notification.service';
+import { environment } from 'src/environments/environment';
+
 const firebaseConfig = {
   apiKey: "AIzaSyDNB80u8h4NeObR5jTB0bPGXnjB4tiQyLk",
   authDomain: "notify-erp-test.firebaseapp.com",
@@ -16,6 +18,8 @@ const firebaseConfig = {
   appId: "1:940138555541:web:41420c65b3fa482546139c",
   measurementId: "G-T480HZX4TY"
 };
+// const firebaseConfig = environment.firebaseConfig;
+
 
 @Component({
   selector: 'app-root',
